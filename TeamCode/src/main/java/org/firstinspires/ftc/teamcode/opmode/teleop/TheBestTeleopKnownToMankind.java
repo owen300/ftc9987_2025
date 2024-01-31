@@ -71,23 +71,24 @@ import java.util.function.DoubleSupplier;
 
 @TeleOp(name="The Best Teleop Known To Mankind", group="Linear OpMode")
 
-public class TheBestTeleopKnownToMankind extends CommandOpMode
+public final class TheBestTeleopKnownToMankind extends CommandOpMode
 {
-    DriveSubsystem driveSubsystem;
     @Override
     public void initialize()
     {
-
         GamepadEx driver = new GamepadEx(gamepad1);
         GamepadEx operator = new GamepadEx(gamepad2);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        RobotContainer.initiate(hardwareMap, telemetry);
 
         ClawSubsystem clawSubsystem = RobotContainer.getClawSubsystem();
         TiltSubsystem tiltSubsystem = RobotContainer.getTiltSubsystem();
         WristSubsystem wristSubsystem = RobotContainer.getWristSubsystem();
         PlaneLauncherSubsystem planeLauncherSubsystem = RobotContainer.getPlaneLauncherSubsystem();
         ExtensionSubsystem extensionSubsystem = RobotContainer.getExtensionSubsystem();
+        DriveSubsystem driveSubsystem;
         driveSubsystem = RobotContainer.getDriveSubsystem();
      // tiltSubsystem.init();
       //  ExtensionSubsystem extensionSubsystem = new ExtensionSubsystem(hardwareMap);
@@ -167,8 +168,8 @@ public class TheBestTeleopKnownToMankind extends CommandOpMode
     {
         super.run();
         // TODO: Owen, put that shit in the drivesubsystem periodic telemetry if you need it
-        /*telemetry.addData("heading", driveSubsystem.heading);
-        telemetry.update();*/
+        /*telemetry.addData("heading", driveSubsystem.heading);*/
+        telemetry.update();
     }
 }
 

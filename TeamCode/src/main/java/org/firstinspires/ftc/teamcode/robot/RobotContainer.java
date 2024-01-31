@@ -31,31 +31,38 @@ public class RobotContainer
     private static PlaneLauncherSubsystem planeLauncherSubsystem;
     private static ExtensionSubsystem extensionSubsystem;
 
+    private static boolean initialized = false;
+
     private static IMU imu;
 
-    RobotContainer(HardwareMap hwMap, Telemetry telemetry)
+    public static void initiate(HardwareMap hwMap, Telemetry telemetry)
     {
-        // enable bulk reads for all hubs
-        List<LynxModule> allHubs = hwMap.getAll(LynxModule.class);
-        for(LynxModule module : allHubs){
-            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        if(!initialized) // TODO: Temporary fix, redo this
+        {
+            initialized = true;
+            // enable bulk reads for all hubs
+            List<LynxModule> allHubs = hwMap.getAll(LynxModule.class);
+            for (LynxModule module : allHubs) {
+                module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+            }
+
+            imu = hwMap.get(IMU.class, "imu");
+
+            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                    RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
+                    RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
+            // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+            imu.initialize(parameters);
+
+            driveSubsystem = new DriveSubsystem(hwMap);
+            clawSubsystem = new ClawSubsystem(hwMap);
+            tiltSubsystem = new TiltSubsystem(hwMap, telemetry);
+            wristSubsystem = new WristSubsystem(hwMap);
+            planeLauncherSubsystem = new PlaneLauncherSubsystem(hwMap);
+            extensionSubsystem = new ExtensionSubsystem(hwMap, telemetry);
         }
-
-        imu = hwMap.get(IMU.class, "imu");
-
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
-                RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
-        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-        imu.initialize(parameters);
-
-        driveSubsystem = new DriveSubsystem(hwMap);
-        clawSubsystem = new ClawSubsystem(hwMap);
-        tiltSubsystem = new TiltSubsystem(hwMap,  telemetry);
-        wristSubsystem = new WristSubsystem(hwMap);
-        planeLauncherSubsystem = new PlaneLauncherSubsystem(hwMap);
-        extensionSubsystem = new ExtensionSubsystem(hwMap, telemetry);
     }
+
 
     public static DriveSubsystem getDriveSubsystem() {
         return driveSubsystem;

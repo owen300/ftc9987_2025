@@ -13,7 +13,7 @@ public class WristStow extends CommandBase {
     Timing.Timer timer;
     public WristStow(WristSubsystem subsystem)
     {
-//        this.timer = new Timing.Timer(1000, TimeUnit.MILLISECONDS);
+        this.timer = new Timing.Timer(1000, TimeUnit.MILLISECONDS);
         wristSubsystem = subsystem;
         addRequirements(wristSubsystem);
     }

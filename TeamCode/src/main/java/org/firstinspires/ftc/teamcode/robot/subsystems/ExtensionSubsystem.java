@@ -25,7 +25,7 @@ public class ExtensionSubsystem extends SubsystemBase
     public static final int UNEXTENDED_POSITION = 0;
     public static final int BACKBOARD_POSITION_INCREMENT = 20;
 
-    private static double kP = 0.0, kI = 0.0, kD = 0.0, kF = 0.0;
+    private static double kP = 0.004, kI = 0.0, kD = 0.0, kF = 0.0;
 
     public static double TOLERANCE_PID = 10;
     // tolerance where pid is calculated in ticks
@@ -34,10 +34,10 @@ public class ExtensionSubsystem extends SubsystemBase
 
     private PIDFController pidf;
 
-    private static Motor extension_top;
-    private static Motor extension_bottom;
-    private static MotorGroup extension;
-    private static int target=0;
+    private Motor extension_top;
+    private Motor extension_bottom;
+    private MotorGroup extension;
+    private int target=0;
 
     public ExtensionSubsystem(HardwareMap hMap, Telemetry telemetry)
     {
@@ -45,18 +45,21 @@ public class ExtensionSubsystem extends SubsystemBase
         pidf.setTolerance(TOLERANCE_PID);
         extension_top =  new Motor(hMap, "extension_motor_1");
         extension_bottom =  new Motor(hMap, "extension_motor_2");
+        extension_bottom.setInverted(true);
+        extension_top.setInverted(true);
+        extension_bottom.resetEncoder();
         extension = new MotorGroup(extension_top, extension_bottom);
 
         this.telemetry = telemetry;
 
-        extension.resetEncoder(); // RESET_ENCODERS
-        extension.setInverted(true);
+
         extension.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         extension.setRunMode(Motor.RunMode.RawPower);
+        //extension.getCurrentPosition();
     }
 
-    public static int getCurrentPosition() {
-        return extension.getCurrentPosition();
+    public int getCurrentPosition() {
+        return extension_bottom.getCurrentPosition();
     }
 
     /**
@@ -85,7 +88,7 @@ public class ExtensionSubsystem extends SubsystemBase
     //  extension whenever the motor isn't actively trying to go to a spot
     public boolean atTargetPosition ()
     {
-        return abs(pidf.getSetPoint() - extension.getCurrentPosition()) < ACCEPTABLE_POSITION_TOLERANCE;
+        return abs(pidf.getSetPoint() - getCurrentPosition()) < ACCEPTABLE_POSITION_TOLERANCE;
     }
 
     /**
@@ -95,19 +98,19 @@ public class ExtensionSubsystem extends SubsystemBase
      */
     public void manualControl(double joystick)
     {
-        if(extension.getCurrentPosition()>UNEXTENDED_POSITION&&extension.getCurrentPosition()<ExtensionGoToPosition.ONE_STAGE_EXTENSION)extension.set(joystick);
+        if(getCurrentPosition()>UNEXTENDED_POSITION&&getCurrentPosition()<ExtensionGoToPosition.ONE_STAGE_EXTENSION)extension.set(joystick);
     }
 
     public void periodic()
     {
        callTelemetry();
-        if(!atTargetPosition())extension.set(pidf.calculate(extension.getCurrentPosition(),target));
+        if(!atTargetPosition())extension.set(pidf.calculate(getCurrentPosition(),target));
         else extension.set(0);
     }
 
     public void callTelemetry()
     {
-        telemetry.addData("Extension Position", extension.getCurrentPosition());
+        telemetry.addData("Extension Position", getCurrentPosition());
         telemetry.addData("Extension Target Position", pidf.getSetPoint());
     }
 }
