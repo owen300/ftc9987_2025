@@ -116,7 +116,7 @@ public class TheBestTeleopKnownToMankind extends CommandOpMode
         clawTrigger.whenReleased(
                 new ClawCloseCommand(clawSubsystem));
         //TODO: reset heading
-        //driver.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()->driveSubsystem.resetIMU()));
+        driver.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()->driveSubsystem.resetIMU()));
 
         //deposit
         operator.getGamepadButton(GamepadKeys.Button.Y).whenPressed(

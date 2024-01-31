@@ -47,9 +47,20 @@ public class ClawSubsystem extends SubsystemBase
         clawLeft.setPosition(CLAW1_CLOSED);
         clawRight.setPosition(CLAW_CLOSED);
     }
+    public void closeLeft() {
+        clawLeft.setPosition(CLAW1_CLOSED);
+    }
+    public void closeRight() {
+        clawRight.setPosition(CLAW_CLOSED);
+    }
 
-    public boolean pixelDetected()
+
+    public boolean pixelDetectedLeft()
     {
         return (leftDist.getDistance(MM)<DETECTION_DISTANCE);
+    }
+    public boolean pixelDetectedRight()
+    {
+        return (rightDist.getDistance(MM)<DETECTION_DISTANCE);
     }
 }

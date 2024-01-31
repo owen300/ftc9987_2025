@@ -22,10 +22,15 @@ public class ClawAutoCommand extends CommandBase
     public void initialize() {
         clawSubsystem.openBoth();
     }
+    @Override
+    public void execute(){
+        if(clawSubsystem.pixelDetectedLeft())clawSubsystem.closeLeft();
+        if(clawSubsystem.pixelDetectedRight())clawSubsystem.closeRight();
+    }
 
     @Override
     public boolean isFinished() {
-        return clawSubsystem.pixelDetected();
+        return clawSubsystem.pixelDetectedLeft()&& clawSubsystem.pixelDetectedRight();
     }
 
     @Override
