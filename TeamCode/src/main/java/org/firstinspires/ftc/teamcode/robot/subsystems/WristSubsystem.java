@@ -10,18 +10,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class WristSubsystem extends SubsystemBase
 {
     private static final double WRIST_DEPOSIT = 0.65;
-    private static final double WRIST1_DEPOSIT = 0.35;
     private static final double WRIST_INTAKE = 0.5;
-    private static final double WRIST1_INTAKE = 1;
     private static final double WRIST_STOW = 0.65;
-    private static final double WRIST1_STOW = 0.35;
-
-    public static final double DETECTION_DISTANCE = 40;
+    private static final double WRIST_TOP_DOWN_INTAKE = 0.65; // TODO: find value
 
     private static Servo wristServo;
-
-    private static DistanceSensor leftDist;
-    private static DistanceSensor rightDist;
 
     public WristSubsystem(final HardwareMap hMap) {
         wristServo = hMap.get(Servo.class, "wrist");
@@ -40,6 +33,5 @@ public class WristSubsystem extends SubsystemBase
 
     public void setWristStow() {
         wristServo.setPosition(WRIST_STOW);
-
     }
 }
