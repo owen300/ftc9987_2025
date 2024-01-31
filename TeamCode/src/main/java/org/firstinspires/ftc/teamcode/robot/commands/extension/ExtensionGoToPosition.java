@@ -13,8 +13,8 @@ public class ExtensionGoToPosition extends CommandBase
 
     public static final int FULL_EXTENSION = 2300;
     public static final int LOW_PLACE_POS=0;
-    public static final int ONE_STAGE_EXTENSION = 1700;
-    public static final int LOW_POSITION = 0;
+    public static final int ONE_STAGE_EXTENSION = 654;
+    public static final int LOW_POSITION = -56;
     public static final int INTAKE = 0;
     // auto
 

@@ -48,6 +48,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.ftcLib_DLC.TriggerAnalogButton;
 import org.firstinspires.ftc.teamcode.robot.RobotContainer;
+import org.firstinspires.ftc.teamcode.robot.commands.claw.ClawAutoCommand;
 import org.firstinspires.ftc.teamcode.robot.commands.claw.ClawCloseCommand;
 import org.firstinspires.ftc.teamcode.robot.commands.claw.ClawOpenCommand;
 import org.firstinspires.ftc.teamcode.robot.commands.drivetrain.DriveFieldCentric;
@@ -104,8 +105,7 @@ public class TheBestTeleopKnownToMankind extends CommandOpMode
                 () -> driverTrigger.get()));
 
         //manual extension by default unless another command using it runs
-        extensionSubsystem.setDefaultCommand(
-                new ExtensionJoystick(extensionSubsystem, () -> operator.getLeftY()));
+
 
 
         //claw
@@ -115,20 +115,32 @@ public class TheBestTeleopKnownToMankind extends CommandOpMode
                 new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.BOTH));
         clawTrigger.whenReleased(
                 new ClawCloseCommand(clawSubsystem));
-        //TODO: reset heading
+
+        operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                new ParallelCommandGroup(new InstantCommand(()->CommandScheduler.getInstance().cancel(CommandScheduler.getInstance().requiring(clawSubsystem))),
+
+                new SequentialCommandGroup(
+                        new TiltGoToPosition(tiltSubsystem,TiltGoToPosition.TELEOP_INTAKE),
+                        new ExtensionGoToPosition(extensionSubsystem, ExtensionGoToPosition.LOW_POSITION),
+                        new WristIntake(wristSubsystem),
+                        new ClawAutoCommand(clawSubsystem),
+                        new WristStow(wristSubsystem)
+                        )));
+
         driver.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()->driveSubsystem.resetIMU()));
 
         //deposit
         operator.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                new SequentialCommandGroup(
+                new ParallelCommandGroup(
                         new TiltGoToPosition(tiltSubsystem, TiltGoToPosition.TELEOP_DEPOSIT),
+                        new ExtensionGoToPosition(extensionSubsystem,ExtensionGoToPosition.LOW_PLACE_POS),
                         new WristDeposit(wristSubsystem)));
 
         //intake
         operator.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 new ParallelCommandGroup(
                         new TiltGoToPosition(tiltSubsystem, TiltGoToPosition.TELEOP_INTAKE),
-                        //new ExtensionGoToPosition(extensionSubsystem, ExtensionGoToPosition.STOW_POSITION),
+                        new ExtensionGoToPosition(extensionSubsystem, ExtensionGoToPosition.STOW_POSITION),
                         new WristIntake(wristSubsystem)));
         //stow
         operator.getGamepadButton(GamepadKeys.Button.B).whenPressed(
@@ -142,8 +154,8 @@ public class TheBestTeleopKnownToMankind extends CommandOpMode
                 .and(operator.getGamepadButton(GamepadKeys.Button.A))
                 .whenActive(new LaunchPlane(planeLauncherSubsystem));
 
-        //operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-
+        operator.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(()->extensionSubsystem.incrementUp()));
+        operator.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(()->extensionSubsystem.incrementDown()));
 
         // should be able to get interrupted by ExtensionGoToPosition
         //CommandScheduler.getInstance().schedule(true,extendoManualCommand);

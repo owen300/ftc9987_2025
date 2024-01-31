@@ -28,9 +28,9 @@ public class TiltSubsystem extends SubsystemBase
     private static double PID_SPEED = 1;
     private static double KP = 0.004, KI = 0.0, kD = 0.0008;
     private static double KF = 0.3;
-    private static double extensionConstant = 0.3;
+    private static double extensionConstant = 0;
     private static double TICKS_IN_DEGREE = (1.75*1425.1)/360.0;
-    private static double TOLERANCE_PID = 10;
+    private static double TOLERANCE_PID = 5;
     // tolerance where pid is calculated in ticks
     private static double ACCEPTABLE_POSITION_TOLERANCE_DEGREES = 35;
     // acceptable position tolerance in degrees
@@ -90,13 +90,14 @@ public class TiltSubsystem extends SubsystemBase
         // target position relative to the arm starting position
 
         // always compensates for gravity
-        double ffOutput = KF*Math.cos(Math.toRadians(currentAngle)) *
-                (extensionConstant*ExtensionSubsystem.getCurrentPosition());
+        double ffOutput = KF*Math.cos(Math.toRadians(currentAngle));/* *
+                (extensionConstant*ExtensionSubsystem.getCurrentPosition());*/
         double pidOutput = 0;
 
         //calculates pid if not at target position
         if(pid.getSetPoint()-currentPos<TOLERANCE_PID) pidOutput = this.pid.calculate(currentPos, targetPosition)*PID_SPEED;
         output = ffOutput + pidOutput;
+        output=ffOutput;//test feedforward
 
         telemetry.addData("ff: ", ffOutput);
         telemetry.addData("pid: ", pidOutput);

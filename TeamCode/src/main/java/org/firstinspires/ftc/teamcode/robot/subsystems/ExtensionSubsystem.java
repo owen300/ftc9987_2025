@@ -50,6 +50,7 @@ public class ExtensionSubsystem extends SubsystemBase
         this.telemetry = telemetry;
 
         extension.resetEncoder(); // RESET_ENCODERS
+        extension.setInverted(true);
         extension.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         extension.setRunMode(Motor.RunMode.RawPower);
     }

@@ -29,7 +29,8 @@ public class DriveFieldCentric extends CommandBase {
         this.slowMode = slowMode;
         drive = subsystem;
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(subsystem);
+        addRequirements(drive
+        );
     }
 
     @Override
