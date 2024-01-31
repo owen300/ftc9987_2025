@@ -37,6 +37,7 @@ public class ExtensionSubsystem extends SubsystemBase
     private static Motor extension_top;
     private static Motor extension_bottom;
     private static MotorGroup extension;
+    private static int target=0;
 
     public ExtensionSubsystem(HardwareMap hMap, Telemetry telemetry)
     {
@@ -65,8 +66,19 @@ public class ExtensionSubsystem extends SubsystemBase
     public void goToPosition(int targetPosition)
     {
         pidf.setSetPoint(targetPosition);
-        if(!atTargetPosition())extension.set(pidf.calculate(extension.getCurrentPosition(), targetPosition));
-        else extension.set(0);
+        target=targetPosition;
+    }
+    public void incrementUp(){
+        if(pidf.getSetPoint()+15<=ExtensionGoToPosition.ONE_STAGE_EXTENSION) {
+            pidf.setSetPoint(pidf.getSetPoint() + 15);
+            target+=15;
+        }
+    }
+    public void incrementDown(){
+        if(pidf.getSetPoint()-15>=ExtensionGoToPosition.LOW_PLACE_POS) {
+            pidf.setSetPoint(pidf.getSetPoint() - 15);
+            target-=15;
+        }
     }
     // TODO: potential problem with not tracking the position of the
     //  extension whenever the motor isn't actively trying to go to a spot
@@ -88,6 +100,8 @@ public class ExtensionSubsystem extends SubsystemBase
     public void periodic()
     {
        callTelemetry();
+        if(!atTargetPosition())extension.set(pidf.calculate(extension.getCurrentPosition(),target));
+        else extension.set(0);
     }
 
     public void callTelemetry()

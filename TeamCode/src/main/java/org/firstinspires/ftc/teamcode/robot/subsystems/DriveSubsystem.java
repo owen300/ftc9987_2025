@@ -21,8 +21,8 @@ public class DriveSubsystem extends SubsystemBase
     private final DcMotor rightRear;
     private final DcMotor leftFront;
     private final DcMotor leftRear;
-    private boolean reset=false;
-    private double offset;
+
+    private double offset=0;
 
     public DriveSubsystem(HardwareMap hardwareMap)
     {
@@ -45,12 +45,11 @@ public class DriveSubsystem extends SubsystemBase
     }
 
     public double heading(){
-        if(reset){
+
             return normalizeRadians(RobotContainer.getImuAbsoluteOrientation()-offset);
-        }return RobotContainer.getImuAbsoluteOrientation();
+
     }
     public void resetIMU() {
-       reset=true;
        offset=RobotContainer.getImuAbsoluteOrientation();
     }
 

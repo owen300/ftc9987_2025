@@ -32,7 +32,7 @@ public class TiltSubsystem extends SubsystemBase
     private static double TICKS_IN_DEGREE = (1.75*1425.1)/360.0;
     private static double TOLERANCE_PID = 10;
     // tolerance where pid is calculated in ticks
-    private static double ACCEPTABLE_POSITION_TOLERANCE_DEGREES = 5;
+    private static double ACCEPTABLE_POSITION_TOLERANCE_DEGREES = 35;
     // acceptable position tolerance in degrees
     private static int HORIZONTAL_ENCODER_VALUE = 51;
     // horizontal position of tilt when encoders are reset in the starting position
@@ -95,7 +95,7 @@ public class TiltSubsystem extends SubsystemBase
         double pidOutput = 0;
 
         //calculates pid if not at target position
-        if(!pid.atSetPoint()) pidOutput = this.pid.calculate(currentPos, targetPosition)*PID_SPEED;
+        if(pid.getSetPoint()-currentPos<TOLERANCE_PID) pidOutput = this.pid.calculate(currentPos, targetPosition)*PID_SPEED;
         output = ffOutput + pidOutput;
 
         telemetry.addData("ff: ", ffOutput);
