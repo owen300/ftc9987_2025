@@ -30,8 +30,8 @@ public class AutoBlueLeft extends LinearOpMode
 {
     private static final double TILE = 24.0;
     @Override
-    public void runOpMode() throws InterruptedException {
-        AutoUtil util = new AutoUtil();
+    public void runOpMode() throws InterruptedException
+    {
         AutoMecanumDrive drive = new AutoMecanumDrive(hardwareMap);
 
         ClawSubsystem clawSubsystem = new ClawSubsystem(hardwareMap);

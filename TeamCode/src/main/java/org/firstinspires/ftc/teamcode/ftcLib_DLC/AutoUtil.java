@@ -14,11 +14,11 @@ public class AutoUtil {
     static final int CLAW_CLEARS_DRIVETRAIN = 3000;
     static final int DROP_TIME = 3000;*/
 
-    public double mirrorAngle(double angle) {
+    public static double mirrorAngle(double angle) {
         return 180 - angle;
     }
 
-    public Pose2d mirror(Pose2d pose2d) {
+    public static Pose2d mirror(Pose2d pose2d) {
         Pose2d flipped = new Pose2d(pose2d.getX(), -pose2d.getY(), mirrorAngle(pose2d.getHeading()));
         return flipped;
     }
