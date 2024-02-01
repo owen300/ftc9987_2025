@@ -20,9 +20,18 @@ import org.firstinspires.ftc.teamcode.robot.commands.extension.ExtensionGoToPosi
 @Config
 public class ExtensionSubsystem extends SubsystemBase
 {
+    public static enum State{
+        deposit,
+        intake
+}
+    public static State state=State.deposit;
+
     Telemetry telemetry;
 
-    public static final int UNEXTENDED_POSITION = 0;
+    public static int UNEXTENDED_POSITION(){
+        if(state.equals(State.deposit)) return -56;
+        return 0;
+    }
     public static final int BACKBOARD_POSITION_INCREMENT = 20;
 
     private static double kP = 0.0042, kI = 0.0, kD = 0.0, kF = 0.0;
@@ -75,6 +84,8 @@ public class ExtensionSubsystem extends SubsystemBase
     {
         pidf.setSetPoint(targetPosition);
         target=targetPosition;
+        if(targetPosition==ExtensionGoToPosition.LOW_POSITION)state=State.deposit;
+        else if(targetPosition==ExtensionGoToPosition.STOW_POSITION)state=State.intake;
     }
     public void incrementUp(){
         if(pidf.getSetPoint()+30<=ExtensionGoToPosition.ONE_STAGE_EXTENSION) {
@@ -86,12 +97,12 @@ public class ExtensionSubsystem extends SubsystemBase
         }
     }
     public void incrementDown(){
-        if(pidf.getSetPoint()-30>=ExtensionGoToPosition.LOW_PLACE_POS) {
+        if(pidf.getSetPoint()-30>=UNEXTENDED_POSITION()) {
             pidf.setSetPoint(pidf.getSetPoint() - 30);
             target-=30;
         }else {
-            pidf.setSetPoint(ExtensionGoToPosition.LOW_PLACE_POS);
-            target=ExtensionGoToPosition.LOW_PLACE_POS;
+            pidf.setSetPoint(UNEXTENDED_POSITION());
+            target=UNEXTENDED_POSITION();
         }
     }
     // TODO: potential problem with not tracking the position of the
@@ -108,7 +119,7 @@ public class ExtensionSubsystem extends SubsystemBase
      */
     public void manualControl(double joystick)
     {
-        if(getCurrentPosition()>UNEXTENDED_POSITION&&getCurrentPosition()<ExtensionGoToPosition.ONE_STAGE_EXTENSION)extension.set(joystick);
+        if(getCurrentPosition()>UNEXTENDED_POSITION()&&getCurrentPosition()<ExtensionGoToPosition.ONE_STAGE_EXTENSION)extension.set(joystick);
     }
 
     public void periodic()
