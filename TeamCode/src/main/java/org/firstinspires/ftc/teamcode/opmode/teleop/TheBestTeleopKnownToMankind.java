@@ -156,7 +156,7 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
                         new WristStow(wristSubsystem),
                         new SequentialCommandGroup(
                                 new ExtensionGoToPosition(extensionSubsystem,ExtensionGoToPosition.LOW_POSITION),
-                        new TiltGoToPosition(tiltSubsystem, TiltGoToPosition.TELEOP_INTAKE),
+                        new TiltGoToPosition(tiltSubsystem, TiltGoToPosition.STOW),
                         new ExtensionGoToPosition(extensionSubsystem, ExtensionGoToPosition.STOW_POSITION)
                         )));
 
@@ -165,8 +165,8 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
                 .and(operator.getGamepadButton(GamepadKeys.Button.A))
                 .whenActive(new LaunchPlane(planeLauncherSubsystem));
 
-        operator.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(()->extensionSubsystem.incrementUp()));
-        operator.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(()->extensionSubsystem.incrementDown()));
+        operator.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(new InstantCommand(()->extensionSubsystem.incrementUp()));
+        operator.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(new InstantCommand(()->extensionSubsystem.incrementDown()));
 
         // should be able to get interrupted by ExtensionGoToPosition
         //CommandScheduler.getInstance().schedule(true,extendoManualCommand);

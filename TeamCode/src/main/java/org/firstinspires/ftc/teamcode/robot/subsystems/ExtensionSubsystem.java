@@ -46,7 +46,7 @@ public class ExtensionSubsystem extends SubsystemBase
     private Motor extension_top;
     private Motor extension_bottom;
     private MotorGroup extension;
-    private int target=0;
+    private double target=0;
 
     public ExtensionSubsystem(HardwareMap hMap, Telemetry telemetry)
     {
@@ -89,7 +89,7 @@ public class ExtensionSubsystem extends SubsystemBase
     public void incrementUp(){
         if(pidf.getSetPoint()+30<=ExtensionGoToPosition.ONE_STAGE_EXTENSION) {
             pidf.setSetPoint(pidf.getSetPoint() + 30);
-            target+=30;
+            target=pidf.getSetPoint()+30;
         }else{
             pidf.setSetPoint(ExtensionGoToPosition.ONE_STAGE_EXTENSION);
             target=ExtensionGoToPosition.ONE_STAGE_EXTENSION;
@@ -98,7 +98,7 @@ public class ExtensionSubsystem extends SubsystemBase
     public void incrementDown(){
         if(pidf.getSetPoint()-30>=UNEXTENDED_POSITION()) {
             pidf.setSetPoint(pidf.getSetPoint() - 30);
-            target-=30;
+            target=pidf.getSetPoint()-30;
         }else {
             pidf.setSetPoint(UNEXTENDED_POSITION());
             target=UNEXTENDED_POSITION();
