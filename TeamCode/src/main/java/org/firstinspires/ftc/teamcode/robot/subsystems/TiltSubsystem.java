@@ -26,7 +26,7 @@ public class TiltSubsystem extends SubsystemBase
 
     //increase this value to increase the speed (and decrease the accuracy / increase inertia) of the tilt
     private static double PID_SPEED = 1;
-    private static double KP = 0.002, KI = 0.0, kD = 0.0001;
+    private static double KP = 0.0018, KI = 0.0, kD = 0.0001;
     private static double KF = 0.20;
     private static double extensionConstant = 0;
     private static double TICKS_IN_DEGREE = (2.8*1425.1)/360.0;

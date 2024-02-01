@@ -155,6 +155,7 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
                 new ParallelCommandGroup(
                         new WristStow(wristSubsystem),
                         new SequentialCommandGroup(
+                                new ExtensionGoToPosition(extensionSubsystem,ExtensionGoToPosition.LOW_POSITION),
                         new TiltGoToPosition(tiltSubsystem, TiltGoToPosition.TELEOP_INTAKE),
                         new ExtensionGoToPosition(extensionSubsystem, ExtensionGoToPosition.STOW_POSITION)
                         )));
