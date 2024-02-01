@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.auto.trajectorysequence;
 
+import static org.firstinspires.ftc.teamcode.robot.commands.claw.ClawOpenCommand.Side.RIGHT;
 import static org.firstinspires.ftc.teamcode.robot.commands.tilt.TiltGoToPosition.TELEOP_DEPOSIT;
 import static org.firstinspires.ftc.teamcode.robot.commands.tilt.TiltGoToPosition.TELEOP_INTAKE;
 
@@ -59,12 +60,12 @@ public class AutoBlueFar extends LinearOpMode
         SequentialCommandGroup place_pixel_and_stow = new SequentialCommandGroup(
                 new TiltGoToPosition(tiltSubsystem, TiltGoToPosition.TELEOP_INTAKE),
                 new WristIntake(wristSubsystem).withTimeout(300),
-                new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.RIGHT).withTimeout(1000),
+                new ClawOpenCommand(clawSubsystem, RIGHT).withTimeout(1000),
                 stow);
 
         SequentialCommandGroup deposit = new SequentialCommandGroup(
                 new TiltGoToPosition(tiltSubsystem, TELEOP_DEPOSIT),
-                new WristDeposit(wristSubsystem).withTimeout(400),
+                new WristDeposit(wristSubsystem).withTimeout(800),
                 new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.BOTH).withTimeout(500));
 
         CommandScheduler.getInstance().schedule(
@@ -84,7 +85,7 @@ public class AutoBlueFar extends LinearOpMode
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(deposit);
                 })
-                .lineToLinearHeading(new Pose2d(TILE*2.25, 1.5*TILE, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(TILE*2.35, 1.5*TILE, Math.toRadians(0)))
 
                 .lineToConstantHeading(new Vector2d(TILE*1.9, 2.5*TILE))
                 .addDisplacementMarker(() -> {
