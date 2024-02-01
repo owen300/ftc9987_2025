@@ -78,7 +78,7 @@ public class AutoBlueFar extends LinearOpMode
                 .addTemporalMarker(1.3, () -> {
                     CommandScheduler.getInstance().schedule(place_pixel_and_stow);
                 })
-                .lineToLinearHeading(new Pose2d(TILE*-1.5, 0.5*TILE, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(TILE*-1.5, 0.47*TILE, Math.toRadians(-90)))
                 .waitSeconds(2)
                 .turn(Math.toRadians(90))
                 .lineToLinearHeading(new Pose2d(TILE*1.5, 0.5*TILE, Math.toRadians(0)))
