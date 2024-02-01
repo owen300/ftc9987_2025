@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.robot.RobotContainer;
+
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.normalizeRadians;
 
 import java.util.List;
@@ -21,11 +23,23 @@ public class DriveSubsystem extends SubsystemBase
     private final DcMotor rightRear;
     private final DcMotor leftFront;
     private final DcMotor leftRear;
-
+    private static IMU imu;
     private double offset=0;
 
     public DriveSubsystem(HardwareMap hardwareMap)
     {
+        List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
+        for (LynxModule module : allHubs) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
+
+        imu = hardwareMap.get(IMU.class, "imu");
+
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
+        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+        imu.initialize(parameters);
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         rightRear = hardwareMap.get(DcMotor.class, "rightRear");
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
@@ -43,14 +57,17 @@ public class DriveSubsystem extends SubsystemBase
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+    public void init(){
+        imu.resetYaw();
+    }
 
     public double heading(){
 
-            return normalizeRadians(RobotContainer.getImuAbsoluteOrientation()-offset);
+            return normalizeRadians(imu.getRobotYawPitchRollAngles().getYaw(RADIANS)-offset);
 
     }
     public void resetIMU() {
-       offset=RobotContainer.getImuAbsoluteOrientation();
+       offset=imu.getRobotYawPitchRollAngles().getYaw(RADIANS);
     }
 
     public void runRobotCentric(double y,double x,double rx, double topSpeed) {

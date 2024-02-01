@@ -81,15 +81,15 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        RobotContainer.initiate(hardwareMap, telemetry);
 
-        ClawSubsystem clawSubsystem = RobotContainer.getClawSubsystem();
-        TiltSubsystem tiltSubsystem = RobotContainer.getTiltSubsystem();
-        WristSubsystem wristSubsystem = RobotContainer.getWristSubsystem();
-        PlaneLauncherSubsystem planeLauncherSubsystem = RobotContainer.getPlaneLauncherSubsystem();
-        ExtensionSubsystem extensionSubsystem = RobotContainer.getExtensionSubsystem();
+
+        ClawSubsystem clawSubsystem = new ClawSubsystem(hardwareMap);
+        TiltSubsystem tiltSubsystem = new TiltSubsystem(hardwareMap,telemetry);
+        WristSubsystem wristSubsystem = new WristSubsystem(hardwareMap);
+        PlaneLauncherSubsystem planeLauncherSubsystem = new PlaneLauncherSubsystem(hardwareMap);
+        ExtensionSubsystem extensionSubsystem = new ExtensionSubsystem(hardwareMap,telemetry);
         DriveSubsystem driveSubsystem;
-        driveSubsystem = RobotContainer.getDriveSubsystem();
+        driveSubsystem = new DriveSubsystem(hardwareMap);
      // tiltSubsystem.init();
       //  ExtensionSubsystem extensionSubsystem = new ExtensionSubsystem(hardwareMap);
 
@@ -160,6 +160,13 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
 
         // should be able to get interrupted by ExtensionGoToPosition
         //CommandScheduler.getInstance().schedule(true,extendoManualCommand);
+        while(opModeInInit()){
+            if(gamepad1.a){
+                driveSubsystem.init();
+                extensionSubsystem.init();
+                tiltSubsystem.init();
+            }
+        }
 
     }
 

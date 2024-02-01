@@ -48,12 +48,15 @@ public class TiltSubsystem extends SubsystemBase
         tilt_motor =  hMap.get(DcMotorEx.class, "tilt");
         pid.setTolerance(TOLERANCE_PID);
 
-        tilt_motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+      //  tilt_motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         tilt_motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         tilt_motor.setDirection(DcMotorSimple.Direction.REVERSE);
         tilt_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
+    public void init(){
+        tilt_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        tilt_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
     public void setTargetAngle(double targetAngle)
     {
         this.targetAngle = targetAngle;
@@ -93,7 +96,7 @@ public class TiltSubsystem extends SubsystemBase
         double ffOutput = KF*Math.cos(Math.toRadians(currentAngle));/* *
                 (extensionConstant*ExtensionSubsystem.getCurrentPosition());*/
         double pidOutput = 0;
-
+        pid.setSetPoint(targetPosition);
         //calculates pid if not at target position
         if(abs(pid.getSetPoint()-currentPos)<TOLERANCE_PID) pidOutput = this.pid.calculate(currentPos, targetPosition)*PID_SPEED;
         output = ffOutput + pidOutput;

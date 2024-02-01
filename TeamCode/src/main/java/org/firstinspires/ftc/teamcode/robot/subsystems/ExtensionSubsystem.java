@@ -47,7 +47,7 @@ public class ExtensionSubsystem extends SubsystemBase
         extension_bottom =  new Motor(hMap, "extension_motor_2");
         extension_bottom.setInverted(true);
         extension_top.setInverted(true);
-        extension_bottom.resetEncoder();
+        //extension_bottom.resetEncoder();
         extension = new MotorGroup(extension_top, extension_bottom);
 
         this.telemetry = telemetry;
@@ -56,6 +56,9 @@ public class ExtensionSubsystem extends SubsystemBase
         extension.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         extension.setRunMode(Motor.RunMode.RawPower);
         //extension.getCurrentPosition();
+    }
+    public void init(){
+        extension_bottom.resetEncoder();
     }
 
     public int getCurrentPosition() {
