@@ -52,7 +52,6 @@ public class ExtensionSubsystem extends SubsystemBase
 
         this.telemetry = telemetry;
 
-
         extension.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         extension.setRunMode(Motor.RunMode.RawPower);
 

@@ -54,12 +54,13 @@ public class RobotContainer
             // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
             imu.initialize(parameters);
 
+            /*
             driveSubsystem = new DriveSubsystem(hwMap);
             clawSubsystem = new ClawSubsystem(hwMap);
             tiltSubsystem = new TiltSubsystem(hwMap, telemetry);
             wristSubsystem = new WristSubsystem(hwMap);
             planeLauncherSubsystem = new PlaneLauncherSubsystem(hwMap);
-            extensionSubsystem = new ExtensionSubsystem(hwMap, telemetry);
+            extensionSubsystem = new ExtensionSubsystem(hwMap, telemetry);*/
         }
     }
 
