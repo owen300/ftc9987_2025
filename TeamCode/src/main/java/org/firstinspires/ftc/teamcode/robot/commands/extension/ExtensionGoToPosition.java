@@ -18,7 +18,7 @@ public class ExtensionGoToPosition extends CommandBase
     public static final int INTAKE = 0;
     // auto
 
-    public static final int STOW_POSITION = ExtensionSubsystem.UNEXTENDED_POSITION;
+    public static final int STOW_POSITION = 0;
     // teleop
 
     private final ExtensionSubsystem extensionSubsystem;
