@@ -55,6 +55,7 @@ public class ExtensionSubsystem extends SubsystemBase
 
         extension.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         extension.setRunMode(Motor.RunMode.RawPower);
+
         //extension.getCurrentPosition();
     }
     public void init(){
