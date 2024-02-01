@@ -148,9 +148,11 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
         //stow
         operator.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 new ParallelCommandGroup(
+                        new WristStow(wristSubsystem),
+                        new SequentialCommandGroup(
                         new TiltGoToPosition(tiltSubsystem, TiltGoToPosition.TELEOP_INTAKE),
-                        new ExtensionGoToPosition(extensionSubsystem, ExtensionGoToPosition.STOW_POSITION),
-                        new WristStow(wristSubsystem)));
+                        new ExtensionGoToPosition(extensionSubsystem, ExtensionGoToPosition.STOW_POSITION)
+                        )));
 
         //plane launcher
         operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)

@@ -77,15 +77,21 @@ public class ExtensionSubsystem extends SubsystemBase
         target=targetPosition;
     }
     public void incrementUp(){
-        if(pidf.getSetPoint()+15<=ExtensionGoToPosition.ONE_STAGE_EXTENSION) {
-            pidf.setSetPoint(pidf.getSetPoint() + 15);
-            target+=15;
+        if(pidf.getSetPoint()+30<=ExtensionGoToPosition.ONE_STAGE_EXTENSION) {
+            pidf.setSetPoint(pidf.getSetPoint() + 30);
+            target+=30;
+        }else{
+            pidf.setSetPoint(ExtensionGoToPosition.ONE_STAGE_EXTENSION);
+            target=ExtensionGoToPosition.ONE_STAGE_EXTENSION;
         }
     }
     public void incrementDown(){
-        if(pidf.getSetPoint()-15>=ExtensionGoToPosition.LOW_PLACE_POS) {
-            pidf.setSetPoint(pidf.getSetPoint() - 15);
-            target-=15;
+        if(pidf.getSetPoint()-30>=ExtensionGoToPosition.LOW_PLACE_POS) {
+            pidf.setSetPoint(pidf.getSetPoint() - 30);
+            target-=30;
+        }else {
+            pidf.setSetPoint(ExtensionGoToPosition.LOW_PLACE_POS);
+            target=ExtensionGoToPosition.LOW_PLACE_POS;
         }
     }
     // TODO: potential problem with not tracking the position of the
