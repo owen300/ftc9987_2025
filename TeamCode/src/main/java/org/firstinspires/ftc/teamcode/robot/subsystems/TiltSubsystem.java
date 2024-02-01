@@ -32,7 +32,7 @@ public class TiltSubsystem extends SubsystemBase
     private static double TICKS_IN_DEGREE = (2.8*1425.1)/360.0;
     private static double TOLERANCE_PID = 5;
     // tolerance where pid is calculated in ticks
-    private static double ACCEPTABLE_POSITION_TOLERANCE_DEGREES = 35;
+    private static double ACCEPTABLE_POSITION_TOLERANCE_DEGREES = 60;
     // acceptable position tolerance in degrees
     private static int HORIZONTAL_ENCODER_VALUE = 20;
     // horizontal position of tilt when encoders are reset in the starting position

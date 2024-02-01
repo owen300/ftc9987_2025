@@ -25,7 +25,7 @@ public class ExtensionSubsystem extends SubsystemBase
     public static final int UNEXTENDED_POSITION = 0;
     public static final int BACKBOARD_POSITION_INCREMENT = 20;
 
-    private static double kP = 0.004, kI = 0.0, kD = 0.0, kF = 0.0;
+    private static double kP = 0.0042, kI = 0.0, kD = 0.0, kF = 0.0;
 
     public static double TOLERANCE_PID = 10;
     // tolerance where pid is calculated in ticks

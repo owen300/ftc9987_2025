@@ -113,16 +113,21 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
         TriggerAnalogButton clawTrigger =
                 new TriggerAnalogButton(operator, GamepadKeys.Trigger.RIGHT_TRIGGER,0.9);
         clawTrigger.whileHeld(
-                new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.BOTH));
+                new ParallelCommandGroup(
+                        new InstantCommand(()->CommandScheduler.getInstance().cancel(CommandScheduler.getInstance().requiring(clawSubsystem))),
+                new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.BOTH)
+                ));
         clawTrigger.whenReleased(
-                new ClawCloseCommand(clawSubsystem));
+                new ParallelCommandGroup(
+                        new InstantCommand(()->CommandScheduler.getInstance().cancel(CommandScheduler.getInstance().requiring(clawSubsystem))),
+                        new ClawCloseCommand(clawSubsystem)));
 
         operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new ParallelCommandGroup(new InstantCommand(()->CommandScheduler.getInstance().cancel(CommandScheduler.getInstance().requiring(clawSubsystem))),
 
                 new SequentialCommandGroup(
                         new TiltGoToPosition(tiltSubsystem,TiltGoToPosition.TELEOP_INTAKE),
-                        new ExtensionGoToPosition(extensionSubsystem, ExtensionGoToPosition.LOW_POSITION),
+                        new ExtensionGoToPosition(extensionSubsystem, 0),
                         new WristIntake(wristSubsystem),
                         new ClawAutoCommand(clawSubsystem),
                         new WristStow(wristSubsystem)
