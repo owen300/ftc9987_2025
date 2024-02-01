@@ -26,6 +26,6 @@ public class WristIntake extends CommandBase
 
     @Override
     public boolean isFinished() {
-        return true;
+        return timer.done();
     }
 }

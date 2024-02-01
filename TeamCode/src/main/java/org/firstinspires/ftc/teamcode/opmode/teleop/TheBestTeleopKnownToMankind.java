@@ -133,9 +133,11 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
         //deposit
         operator.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 new ParallelCommandGroup(
+                new WristDeposit(wristSubsystem),
+                new SequentialCommandGroup(
                         new TiltGoToPosition(tiltSubsystem, TiltGoToPosition.TELEOP_DEPOSIT),
-                        new ExtensionGoToPosition(extensionSubsystem,ExtensionGoToPosition.LOW_PLACE_POS),
-                        new WristDeposit(wristSubsystem)));
+                        new ExtensionGoToPosition(extensionSubsystem,ExtensionGoToPosition.LOW_PLACE_POS)
+                        )));
 
         //intake
         operator.getGamepadButton(GamepadKeys.Button.A).whenPressed(
