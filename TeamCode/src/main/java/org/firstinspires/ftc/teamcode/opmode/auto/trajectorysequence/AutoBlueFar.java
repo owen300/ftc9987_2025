@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode.opmode.auto.trajectorysequence;
 
 import static org.firstinspires.ftc.teamcode.robot.commands.tilt.TiltGoToPosition.TELEOP_DEPOSIT;
+import static org.firstinspires.ftc.teamcode.robot.commands.tilt.TiltGoToPosition.TELEOP_INTAKE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.AutoMecanumDrive;
+import org.firstinspires.ftc.teamcode.opmode.auto.trajectorysequence.sequencesegment.WaitSegment;
 import org.firstinspires.ftc.teamcode.robot.RobotContainer;
 import org.firstinspires.ftc.teamcode.robot.commands.StowEverything;
 import org.firstinspires.ftc.teamcode.robot.commands.claw.ClawCloseCommand;
@@ -47,7 +50,7 @@ public class AutoBlueFar extends LinearOpMode
         extensionSubsystem.init();
 
 
-        Pose2d startPose = new Pose2d(TILE*0.4, 2.5*TILE, Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(-TILE*1.6, 2.5*TILE, Math.toRadians(-90));
 
         drive.setPoseEstimate(startPose);
 
@@ -55,26 +58,40 @@ public class AutoBlueFar extends LinearOpMode
 
         SequentialCommandGroup place_pixel_and_stow = new SequentialCommandGroup(
                 new TiltGoToPosition(tiltSubsystem, TiltGoToPosition.TELEOP_INTAKE),
-                new WristIntake(wristSubsystem),
-                new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.RIGHT),
+                new WristIntake(wristSubsystem).withTimeout(300),
+                new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.RIGHT).withTimeout(1000),
                 stow);
 
         SequentialCommandGroup deposit = new SequentialCommandGroup(
                 new TiltGoToPosition(tiltSubsystem, TELEOP_DEPOSIT),
-                new WristDeposit(wristSubsystem),
-                new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.LEFT));
+                new WristDeposit(wristSubsystem).withTimeout(400),
+                new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.BOTH).withTimeout(500));
 
-        CommandScheduler.getInstance().schedule(stow);
+        CommandScheduler.getInstance().schedule(
+                new WristStow(wristSubsystem)
+        );
         CommandScheduler.getInstance().run();
 
         TrajectorySequence Center = drive.trajectorySequenceBuilder(startPose)
                 .lineToConstantHeading(new Vector2d(-TILE*1.5, 1.45*TILE))
+                .addTemporalMarker(1.3, () -> {
+                    CommandScheduler.getInstance().schedule(place_pixel_and_stow);
+                })
                 .lineToLinearHeading(new Pose2d(TILE*-1.5, 0.5*TILE, Math.toRadians(-90)))
+                .waitSeconds(2)
                 .turn(Math.toRadians(90))
                 .lineToLinearHeading(new Pose2d(TILE*1.5, 0.5*TILE, Math.toRadians(0)))
-                .lineToLinearHeading(new Pose2d(TILE*2, 1.5*TILE, Math.toRadians(0)))
+                .addDisplacementMarker(() -> {
+                    CommandScheduler.getInstance().schedule(deposit);
+                })
+                .lineToLinearHeading(new Pose2d(TILE*2.25, 1.5*TILE, Math.toRadians(0)))
 
                 .lineToConstantHeading(new Vector2d(TILE*1.9, 2.5*TILE))
+                .addDisplacementMarker(() -> {
+                    CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem, extensionSubsystem, clawSubsystem, wristSubsystem));
+
+                })
+                .lineToConstantHeading(new Vector2d(TILE*1.9, 2.499*TILE))
                 .build();
                 /////////////////
 
@@ -106,11 +123,14 @@ public class AutoBlueFar extends LinearOpMode
         markerPosistion = TeamElementPipeline.MarkerPosistion.CENTER;
         while(opModeInInit()) {
             markerPosistion = Vision.determineMarkerPosistion();
+            if(gamepad1.a)CommandScheduler.getInstance().schedule(new ClawCloseCommand(clawSubsystem));
+            CommandScheduler.getInstance().run();
         }
         ////////////////////////////////////////////
 
 
         waitForStart();
+        CommandScheduler.getInstance().schedule(new TiltGoToPosition(tiltSubsystem,TELEOP_INTAKE));
         Vision.webcam.stopStreaming();
         switch (markerPosistion) {
             case CENTER:
