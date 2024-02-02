@@ -87,18 +87,18 @@ public class ExtensionSubsystem extends SubsystemBase
         else if(targetPosition==ExtensionGoToPosition.STOW_POSITION)state=State.intake;
     }
     public void incrementUp(){
-        if(pidf.getSetPoint()+30<=ExtensionGoToPosition.ONE_STAGE_EXTENSION) {
-            pidf.setSetPoint(pidf.getSetPoint() + 30);
-            target=pidf.getSetPoint()+30;
+        if(extension_bottom.getCurrentPosition()+30<=ExtensionGoToPosition.ONE_STAGE_EXTENSION) {
+            pidf.setSetPoint(extension_bottom.getCurrentPosition() + 30);
+            target=pidf.getSetPoint();
         }else{
             pidf.setSetPoint(ExtensionGoToPosition.ONE_STAGE_EXTENSION);
             target=ExtensionGoToPosition.ONE_STAGE_EXTENSION;
         }
     }
     public void incrementDown(){
-        if(pidf.getSetPoint()-30>=UNEXTENDED_POSITION()) {
-            pidf.setSetPoint(pidf.getSetPoint() - 30);
-            target=pidf.getSetPoint()-30;
+        if(extension_bottom.getCurrentPosition()-30>=UNEXTENDED_POSITION()) {
+            pidf.setSetPoint(extension_bottom.getCurrentPosition() - 30);
+            target=pidf.getSetPoint();
         }else {
             pidf.setSetPoint(UNEXTENDED_POSITION());
             target=UNEXTENDED_POSITION();
