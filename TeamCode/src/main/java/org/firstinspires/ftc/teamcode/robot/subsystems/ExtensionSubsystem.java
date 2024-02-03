@@ -34,7 +34,7 @@ public class ExtensionSubsystem extends SubsystemBase
     }
     public static final int BACKBOARD_POSITION_INCREMENT = 20;
 
-    private static double kP = 0.0042, kI = 0.0, kD = 0.0, kF = 0.0;
+    private static double kP = 0.0058, kI = 0.0, kD = 0.0, kF = 0.0;
 
     public static double TOLERANCE_PID = 10;
     // tolerance where pid is calculated in ticks
@@ -87,8 +87,8 @@ public class ExtensionSubsystem extends SubsystemBase
         else if(targetPosition==ExtensionGoToPosition.STOW_POSITION)state=State.intake;
     }
     public void incrementUp(){
-        if(extension_bottom.getCurrentPosition()+30<=ExtensionGoToPosition.ONE_STAGE_EXTENSION) {
-            pidf.setSetPoint(extension_bottom.getCurrentPosition() + 30);
+        if(extension_bottom.getCurrentPosition()+50<=ExtensionGoToPosition.ONE_STAGE_EXTENSION) {
+            pidf.setSetPoint(extension_bottom.getCurrentPosition() + 50);
             target=pidf.getSetPoint();
         }else{
             pidf.setSetPoint(ExtensionGoToPosition.ONE_STAGE_EXTENSION);
@@ -96,8 +96,8 @@ public class ExtensionSubsystem extends SubsystemBase
         }
     }
     public void incrementDown(){
-        if(extension_bottom.getCurrentPosition()-30>=UNEXTENDED_POSITION()) {
-            pidf.setSetPoint(extension_bottom.getCurrentPosition() - 30);
+        if(extension_bottom.getCurrentPosition()-50>=UNEXTENDED_POSITION()) {
+            pidf.setSetPoint(extension_bottom.getCurrentPosition() - 50);
             target=pidf.getSetPoint();
         }else {
             pidf.setSetPoint(UNEXTENDED_POSITION());

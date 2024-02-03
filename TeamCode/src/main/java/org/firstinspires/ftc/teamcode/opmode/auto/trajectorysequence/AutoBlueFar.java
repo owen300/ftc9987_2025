@@ -45,9 +45,6 @@ public class AutoBlueFar extends LinearOpMode
         WristSubsystem wristSubsystem = new WristSubsystem(hardwareMap);
         ExtensionSubsystem extensionSubsystem=new ExtensionSubsystem(hardwareMap,telemetry);
         Pose2d startPose =  new Pose2d(-TILE*1.6, 2.5*TILE, Math.toRadians(-90));
-        driveSubsystem.init();
-        tiltSubsystem.init();
-        extensionSubsystem.init();
         drive.setPoseEstimate(startPose);
 
         StowEverything stow = new StowEverything(tiltSubsystem, extensionSubsystem, clawSubsystem, wristSubsystem);
@@ -64,8 +61,6 @@ public class AutoBlueFar extends LinearOpMode
                 new WristDeposit(wristSubsystem),
                 new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.BOTH).withTimeout(500));
 
-        CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem,extensionSubsystem,clawSubsystem,wristSubsystem));
-        CommandScheduler.getInstance().run();
 
         TrajectorySequence Center = drive.trajectorySequenceBuilder(startPose)
                 .lineToConstantHeading(new Vector2d(-TILE*1.5, 1.457*TILE))
@@ -80,7 +75,7 @@ public class AutoBlueFar extends LinearOpMode
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(deposit);
                 })
-                .lineToLinearHeading(new Pose2d(TILE*2.245, 1.7*TILE, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d((TILE*2.245)+1.25, 1.7*TILE, Math.toRadians(0)))
                 .lineToConstantHeading(new Vector2d(TILE*1.8, 0.5*TILE))
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem,extensionSubsystem,clawSubsystem,wristSubsystem));
@@ -104,7 +99,7 @@ public class AutoBlueFar extends LinearOpMode
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(deposit);
                 })
-                .lineToLinearHeading(new Pose2d(TILE*2.245, 1.9*TILE, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d((TILE*2.245)+1.25, (1.9*TILE)+3.5, Math.toRadians(0)))
                 .lineToConstantHeading(new Vector2d(TILE*1.8, 0.5*TILE))
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem,extensionSubsystem,clawSubsystem,wristSubsystem));
@@ -125,7 +120,7 @@ public class AutoBlueFar extends LinearOpMode
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(deposit);
                 })
-                .lineToLinearHeading(new Pose2d(TILE*2.245, 1.25*TILE, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d((TILE*2.245)+1.25, 1.25*TILE, Math.toRadians(0)))
                 .lineToConstantHeading(new Vector2d(TILE*1.8, 0.5*TILE))
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem,extensionSubsystem,clawSubsystem,wristSubsystem));
@@ -140,7 +135,13 @@ public class AutoBlueFar extends LinearOpMode
         markerPosistion = TeamElementPipeline.MarkerPosistion.CENTER;
         while(opModeInInit()) {
             markerPosistion = Vision.determineMarkerPosistion();
-            if(gamepad1.a)CommandScheduler.getInstance().schedule(new ClawCloseCommand(clawSubsystem));
+            if(gamepad1.a) {
+                driveSubsystem.init();
+                tiltSubsystem.init();
+                extensionSubsystem.init();
+                CommandScheduler.getInstance().schedule(new ClawCloseCommand(clawSubsystem));
+                CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem,extensionSubsystem,clawSubsystem,wristSubsystem));
+            }
             CommandScheduler.getInstance().run();
         }
         ////////////////////////////////////////////

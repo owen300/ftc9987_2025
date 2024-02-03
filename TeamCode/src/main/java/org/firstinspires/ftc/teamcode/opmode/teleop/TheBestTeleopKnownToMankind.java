@@ -153,6 +153,7 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
         //stow
         operator.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 new ParallelCommandGroup(
+                        new InstantCommand(()->CommandScheduler.getInstance().cancel(CommandScheduler.getInstance().requiring(tiltSubsystem))),
                         new WristStow(wristSubsystem),
                         new SequentialCommandGroup(
                                 new ExtensionGoToPosition(extensionSubsystem,ExtensionGoToPosition.LOW_POSITION),
@@ -170,11 +171,12 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
 
         // should be able to get interrupted by ExtensionGoToPosition
         //CommandScheduler.getInstance().schedule(true,extendoManualCommand);
+        tiltSubsystem.init();
         while(opModeInInit()){
             if(gamepad1.a){
                 driveSubsystem.init();
                 extensionSubsystem.init();
-                tiltSubsystem.init();
+
             }
         }
 

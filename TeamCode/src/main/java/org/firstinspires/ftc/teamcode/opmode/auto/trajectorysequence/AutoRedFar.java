@@ -45,9 +45,6 @@ public class AutoRedFar extends LinearOpMode
         WristSubsystem wristSubsystem = new WristSubsystem(hardwareMap);
         ExtensionSubsystem extensionSubsystem=new ExtensionSubsystem(hardwareMap,telemetry);
         Pose2d startPose =  new Pose2d(-TILE*1.4, -2.5*TILE, Math.toRadians(90));
-        driveSubsystem.init();
-        tiltSubsystem.init();
-        extensionSubsystem.init();
         drive.setPoseEstimate(startPose);
 
         StowEverything stow = new StowEverything(tiltSubsystem, extensionSubsystem, clawSubsystem, wristSubsystem);
@@ -64,11 +61,9 @@ public class AutoRedFar extends LinearOpMode
                 new WristDeposit(wristSubsystem),
                 new ClawOpenCommand(clawSubsystem, ClawOpenCommand.Side.BOTH).withTimeout(500));
 
-        CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem,extensionSubsystem,clawSubsystem,wristSubsystem));
-        CommandScheduler.getInstance().run();
 
         TrajectorySequence Center = drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(-TILE*1.5, -1.45*TILE))
+                .lineToConstantHeading(new Vector2d(-TILE*1.5, -1.457*TILE))
                 .addTemporalMarker(1.5, () -> {
                     CommandScheduler.getInstance().schedule(place_pixel_and_stow);
                 })
@@ -80,7 +75,7 @@ public class AutoRedFar extends LinearOpMode
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(deposit);
                 })
-                .lineToLinearHeading(new Pose2d(TILE*2.0, -1.7*TILE, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d((TILE*2.0)+1.25, -1.7*TILE, Math.toRadians(0)))
                 .lineToConstantHeading(new Vector2d(TILE*1.8, -0.5*TILE))
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem,extensionSubsystem,clawSubsystem,wristSubsystem));
@@ -95,7 +90,7 @@ public class AutoRedFar extends LinearOpMode
                 .turn(Math.toRadians(110))
                 .waitSeconds(2)
                 .turn(Math.toRadians(-110))
-                .addTemporalMarker(1.3, () -> {
+                .addTemporalMarker(1.5, () -> {
                     CommandScheduler.getInstance().schedule(place_pixel_and_stow);
                 })
                 .lineToLinearHeading(new Pose2d(TILE*-1.5, -0.5*TILE, Math.toRadians(0)))
@@ -104,7 +99,7 @@ public class AutoRedFar extends LinearOpMode
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(deposit);
                 })
-                .lineToLinearHeading(new Pose2d(TILE*2, -1.9*TILE, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d((TILE*2.0)+1.25, -1.9*TILE, Math.toRadians(0)))
                 .lineToConstantHeading(new Vector2d(TILE*1.8, -0.5*TILE))
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem,extensionSubsystem,clawSubsystem,wristSubsystem));
@@ -117,7 +112,7 @@ public class AutoRedFar extends LinearOpMode
                 .turn(Math.toRadians(-110))
                 .waitSeconds(2)
                 .turn(Math.toRadians(110))
-                .addTemporalMarker(1.3, () -> {
+                .addTemporalMarker(1.5, () -> {
                     CommandScheduler.getInstance().schedule(place_pixel_and_stow);
                 })
                 .lineToLinearHeading(new Pose2d(TILE*-1.5, -0.5*TILE, Math.toRadians(0)))
@@ -126,7 +121,7 @@ public class AutoRedFar extends LinearOpMode
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(deposit);
                 })
-                .lineToLinearHeading(new Pose2d(TILE*2, -1.2*TILE, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d((TILE*2.0)+1.25, -1.2*TILE, Math.toRadians(0)))
                 .lineToConstantHeading(new Vector2d(TILE*1.8, -0.5*TILE))
                 .addDisplacementMarker(() -> {
                     CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem,extensionSubsystem,clawSubsystem,wristSubsystem));
@@ -141,7 +136,13 @@ public class AutoRedFar extends LinearOpMode
         markerPosistion = TeamElementPipeline.MarkerPosistion.CENTER;
         while(opModeInInit()) {
             markerPosistion = Vision.determineMarkerPosistion();
-            if(gamepad1.a)CommandScheduler.getInstance().schedule(new ClawCloseCommand(clawSubsystem));
+            if(gamepad1.a) {
+                driveSubsystem.init();
+                tiltSubsystem.init();
+                extensionSubsystem.init();
+                CommandScheduler.getInstance().schedule(new ClawCloseCommand(clawSubsystem));
+                CommandScheduler.getInstance().schedule(new StowEverything(tiltSubsystem,extensionSubsystem,clawSubsystem,wristSubsystem));
+            }
             CommandScheduler.getInstance().run();
         }
         ////////////////////////////////////////////
