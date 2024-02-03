@@ -73,6 +73,8 @@ import java.util.function.DoubleSupplier;
 
 public final class TheBestTeleopKnownToMankind extends CommandOpMode
 {
+    public boolean ran=true;
+    public TiltSubsystem tiltSubsystem;
     @Override
     public void initialize()
     {
@@ -84,7 +86,7 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
 
 
         ClawSubsystem clawSubsystem = new ClawSubsystem(hardwareMap);
-        TiltSubsystem tiltSubsystem = new TiltSubsystem(hardwareMap,telemetry);
+        tiltSubsystem = new TiltSubsystem(hardwareMap,telemetry);
         WristSubsystem wristSubsystem = new WristSubsystem(hardwareMap);
         PlaneLauncherSubsystem planeLauncherSubsystem = new PlaneLauncherSubsystem(hardwareMap);
         ExtensionSubsystem extensionSubsystem = new ExtensionSubsystem(hardwareMap,telemetry);
@@ -171,12 +173,16 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
 
         // should be able to get interrupted by ExtensionGoToPosition
         //CommandScheduler.getInstance().schedule(true,extendoManualCommand);
-        tiltSubsystem.init();
+
         while(opModeInInit()){
-            if(gamepad1.a){
+            if(gamepad1.circle){
                 driveSubsystem.init();
                 extensionSubsystem.init();
-
+                tiltSubsystem.init();
+                ran=true;
+            }
+            if(gamepad1.square){
+                ran=false;
             }
         }
 
@@ -185,6 +191,8 @@ public final class TheBestTeleopKnownToMankind extends CommandOpMode
     @Override
     public void run()
     {
+        if(!ran)tiltSubsystem.init();
+        ran=true;
         super.run();
         // TODO: Owen, put that shit in the drivesubsystem periodic telemetry if you need it
         /*telemetry.addData("heading", driveSubsystem.heading);*/
