@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class PlaneLauncherSubsystem extends SubsystemBase
 {
-    public static final double PLANE_OPEN = 0.7;
-    public static final double PLANE_CLOSE = 0;
+    public static final double PLANE_OPEN = 0;
+    public static final double PLANE_CLOSE = 0.7;
 
     private static Servo planeServo;
 

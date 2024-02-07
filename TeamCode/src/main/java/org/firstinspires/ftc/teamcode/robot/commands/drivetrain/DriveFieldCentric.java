@@ -14,7 +14,7 @@ public class DriveFieldCentric extends CommandBase {
     private DoubleSupplier rx;
     private BooleanSupplier slowMode;
 
-    private final double SLOW_MODE_SPEED = 0.5;
+    private final double SLOW_MODE_SPEED = 0.25;
 
     public DriveFieldCentric(
             DriveSubsystem subsystem,
