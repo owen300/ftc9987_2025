@@ -1,4 +1,4 @@
-Team 9987 code for the 2024 ftc game, Centerstage
+Team 9987 code for the 2025 game, into the deep
 ## NOTICE
 
 This repository contains the public FTC SDK for the CENTERSTAGE (2023-2024) competition season.
