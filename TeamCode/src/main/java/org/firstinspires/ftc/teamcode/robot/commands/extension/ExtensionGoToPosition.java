@@ -11,11 +11,14 @@ public class ExtensionGoToPosition extends CommandBase
 {
     //TODO:make it always use this command so it works
 
-    public static final int FULL_EXTENSION = 2300;
-    public static final int LOW_PLACE_POS=-56;
+    public static final int LOW_BUCKET_POS=0;
+    public static final int HIGH_BUCKET_POS=100;
     public static final int ONE_STAGE_EXTENSION = 654;
-    public static final int LOW_POSITION = -56;
+    public static final int SAMPLE = 0;
     public static final int INTAKE = 0;
+    public static final int INTAKE_FAR=0;
+
+
     // auto
 
     public static final int STOW_POSITION = 0;

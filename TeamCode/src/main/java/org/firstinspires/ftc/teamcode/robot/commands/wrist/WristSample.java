@@ -7,10 +7,10 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.WristSubsystem;
 
 import java.util.concurrent.TimeUnit;
 
-public class WristStow extends CommandBase {
+public class WristSample extends CommandBase {
     private final WristSubsystem wristSubsystem;
     Timing.Timer timer;
-    public WristStow(WristSubsystem subsystem)
+    public WristSample(WristSubsystem subsystem)
     {
         this.timer = new Timing.Timer(800, TimeUnit.MILLISECONDS);
         wristSubsystem = subsystem;
@@ -20,7 +20,7 @@ public class WristStow extends CommandBase {
     @Override
     public void initialize() {
         timer.start();
-        wristSubsystem.setWristStow();
+        wristSubsystem.setWristSample();
     }
 
     @Override

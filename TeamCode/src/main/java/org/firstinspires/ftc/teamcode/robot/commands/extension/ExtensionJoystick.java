@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.robot.commands.extension;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.robot.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.robot.subsystems.ExtensionSubsystem;
 
 import java.util.function.DoubleSupplier;

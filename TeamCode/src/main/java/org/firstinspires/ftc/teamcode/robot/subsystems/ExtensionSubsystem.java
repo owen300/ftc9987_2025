@@ -25,7 +25,7 @@ public class ExtensionSubsystem extends SubsystemBase
         intake
 }
     public static State state=State.deposit;
-
+    public static int LOW_POSISTION=0;
     Telemetry telemetry;
 
     public static int UNEXTENDED_POSITION(){
@@ -83,8 +83,11 @@ public class ExtensionSubsystem extends SubsystemBase
     {
         pidf.setSetPoint(targetPosition);
         target=targetPosition;
-        if(targetPosition==ExtensionGoToPosition.LOW_POSITION)state=State.deposit;
-        else if(targetPosition==ExtensionGoToPosition.STOW_POSITION)state=State.intake;
+        if(targetPosition==ExtensionGoToPosition.HIGH_BUCKET_POS||targetPosition==ExtensionGoToPosition.LOW_BUCKET_POS||targetPosition==ExtensionGoToPosition.SAMPLE){
+            state=State.deposit;
+        } else if(targetPosition==ExtensionGoToPosition.INTAKE||targetPosition==ExtensionGoToPosition.INTAKE_FAR){
+            state=State.intake;
+        }
     }
     public void incrementUp(){
         if(extension_bottom.getCurrentPosition()+50<=ExtensionGoToPosition.ONE_STAGE_EXTENSION) {
